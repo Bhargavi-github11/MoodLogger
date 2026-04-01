@@ -1,0 +1,82 @@
+import { createContext, useState, useContext, useCallback } from 'react';
+import axios from 'axios';
+import { AuthContext } from './AuthContext';
+
+export const MoodContext = createContext();
+
+export const MoodProvider = ({ children }) => {
+  const [moods, setMoods] = useState([]);
+  const [weeklyMoods, setWeeklyMoods] = useState([]);
+  const [insights, setInsights] = useState(null);
+  const [score, setScore] = useState(0);
+  const { token } = useContext(AuthContext);
+
+  const getHeaders = useCallback(() => ({ headers: { 'x-auth-token': token } }), [token]);
+
+  const fetchMoods = useCallback(async () => {
+    if (!token) return;
+    try {
+      const res = await axios.get('http://localhost:5000/api/moods', getHeaders());
+      setMoods(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [token, getHeaders]);
+
+  const fetchWeeklyMoods = useCallback(async () => {
+    if (!token) return;
+    try {
+      const res = await axios.get('http://localhost:5000/api/moods/week', getHeaders());
+      setWeeklyMoods(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [token, getHeaders]);
+
+  const fetchInsightsAndScore = useCallback(async () => {
+    if (!token) return;
+    try {
+      const [insRes, scoreRes] = await Promise.all([
+        axios.get('http://localhost:5000/api/moods/insights', getHeaders()),
+        axios.get('http://localhost:5000/api/moods/score', getHeaders())
+      ]);
+      setInsights(insRes.data);
+      setScore(scoreRes.data.weeklyScore);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [token, getHeaders]);
+
+  const addOrUpdateMood = async (mood, note, tags) => {
+    try {
+      await axios.post('http://localhost:5000/api/moods', { mood, note, tags }, getHeaders());
+      await fetchMoods();
+      await fetchWeeklyMoods();
+      await fetchInsightsAndScore();
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const deleteMood = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/moods/${id}`, getHeaders());
+      await fetchMoods();
+      await fetchWeeklyMoods();
+      await fetchInsightsAndScore();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
+    <MoodContext.Provider value={{ 
+      moods, weeklyMoods, insights, score, 
+      fetchMoods, fetchWeeklyMoods, fetchInsightsAndScore, 
+      addOrUpdateMood, deleteMood 
+    }}>
+      {children}
+    </MoodContext.Provider>
+  );
+};
