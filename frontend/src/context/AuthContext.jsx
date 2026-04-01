@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = 'https://mood-logger-asyo.vercel.app';
+const API_URL = 'https://moodlogger-1.onrender.com';
 
 export const AuthContext = createContext();
 
