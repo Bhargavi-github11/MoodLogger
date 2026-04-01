@@ -364,3 +364,9 @@ a { text-decoration: none; color: inherit; }
 }
 .react-calendar-heatmap-month-label { transform: translateY(-10px) translateX(0px); }
 .react-calendar-heatmap-weekday-label { transform: translateY(6px); }
+
+/* Select Dropdown Fix */
+select option {
+  background: var(--card-bg);
+  color: var(--text-color);
+}
