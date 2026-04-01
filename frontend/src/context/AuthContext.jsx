@@ -1,6 +1,8 @@
 import { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = 'https://mood-logger-asyo.vercel.app';
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -20,14 +22,14 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const login = async (email, password) => {
-    const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+    const res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
     localStorage.setItem('token', res.data.token);
     setToken(res.data.token);
     setUser(res.data.user);
   };
 
   const register = async (name, email, password) => {
-    const res = await axios.post('http://localhost:5000/api/auth/register', { name, email, password });
+    const res = await axios.post(`${API_URL}/api/auth/register`, { name, email, password });
     localStorage.setItem('token', res.data.token);
     setToken(res.data.token);
     setUser(res.data.user);

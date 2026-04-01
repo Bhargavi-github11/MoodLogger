@@ -2,6 +2,8 @@ import { createContext, useState, useContext, useCallback } from 'react';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';
 
+const API_URL = 'https://mood-logger-asyo.vercel.app';
+
 export const MoodContext = createContext();
 
 export const MoodProvider = ({ children }) => {
@@ -16,7 +18,7 @@ export const MoodProvider = ({ children }) => {
   const fetchMoods = useCallback(async () => {
     if (!token) return;
     try {
-      const res = await axios.get('http://localhost:5000/api/moods', getHeaders());
+      const res = await axios.get(`${API_URL}/api/moods`, getHeaders());
       setMoods(res.data);
     } catch (err) {
       console.error(err);
@@ -26,7 +28,7 @@ export const MoodProvider = ({ children }) => {
   const fetchWeeklyMoods = useCallback(async () => {
     if (!token) return;
     try {
-      const res = await axios.get('http://localhost:5000/api/moods/week', getHeaders());
+      const res = await axios.get(`${API_URL}/api/moods/week`, getHeaders());
       setWeeklyMoods(res.data);
     } catch (err) {
       console.error(err);
@@ -37,8 +39,8 @@ export const MoodProvider = ({ children }) => {
     if (!token) return;
     try {
       const [insRes, scoreRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/moods/insights', getHeaders()),
-        axios.get('http://localhost:5000/api/moods/score', getHeaders())
+        axios.get(`${API_URL}/api/moods/insights`, getHeaders()),
+        axios.get(`${API_URL}/api/moods/score`, getHeaders())
       ]);
       setInsights(insRes.data);
       setScore(scoreRes.data.weeklyScore);
@@ -49,7 +51,7 @@ export const MoodProvider = ({ children }) => {
 
   const addOrUpdateMood = async (mood, note, tags) => {
     try {
-      await axios.post('http://localhost:5000/api/moods', { mood, note, tags }, getHeaders());
+      await axios.post(`${API_URL}/api/moods`, { mood, note, tags }, getHeaders());
       await fetchMoods();
       await fetchWeeklyMoods();
       await fetchInsightsAndScore();
@@ -61,7 +63,7 @@ export const MoodProvider = ({ children }) => {
 
   const deleteMood = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/moods/${id}`, getHeaders());
+      await axios.delete(`${API_URL}/api/moods/${id}`, getHeaders());
       await fetchMoods();
       await fetchWeeklyMoods();
       await fetchInsightsAndScore();
