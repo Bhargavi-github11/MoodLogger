@@ -40,20 +40,50 @@ function Navbar() {
             <Link className="nav-link" to="/">Dashboard</Link>
             <Link className="nav-link" to="/history">History</Link>
             <Link className="nav-link" to="/analytics">Analytics</Link>
-            {user?.name && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '5px', padding: '4px 12px 4px 4px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid var(--card-border)', borderRadius: '30px' }}>
-                <div style={{
-                  width: '30px', height: '30px', borderRadius: '50%', 
-                  background: 'linear-gradient(135deg, var(--primary) 0%, #d8b4fe 100%)',
-                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontWeight: 'bold', fontSize: '0.9rem', boxShadow: '0 2px 10px rgba(99, 102, 241, 0.3)'
-                }}>
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-                <span style={{ fontWeight: '600', fontSize: '0.9rem', color: 'var(--text-color)' }}>{user.name}</span>
-              </div>
-            )}
-            <button className="theme-toggle" onClick={handleLogout} style={{color: '#fca5a5'}}>Logout</button>
+            <div 
+              title={user?.name || 'Friend'}
+              style={{
+                width: '36px', height: '36px', borderRadius: '50%', marginLeft: '8px',
+                background: 'linear-gradient(135deg, var(--primary) 0%, #d8b4fe 100%)',
+                color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)',
+                border: '2px solid var(--card-bg)', cursor: 'pointer', transition: 'transform 0.2s'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              {(user?.name || 'Friend').charAt(0).toUpperCase()}
+            </div>
+            
+            <button 
+              onClick={handleLogout} 
+              style={{
+                background: 'rgba(252, 165, 165, 0.15)',
+                color: 'var(--angry)',
+                border: '1px solid rgba(252, 165, 165, 0.3)',
+                padding: '6px 14px',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                transition: 'all 0.3s ease',
+                fontFamily: 'inherit'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = 'var(--angry)';
+                e.currentTarget.style.color = 'white';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(252, 165, 165, 0.5)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = 'rgba(252, 165, 165, 0.15)';
+                e.currentTarget.style.color = 'var(--angry)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              Logout <span style={{fontSize: '1.1rem'}}>👋</span>
+            </button>
           </>
         ) : (
           <>
