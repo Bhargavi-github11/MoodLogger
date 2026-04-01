@@ -167,7 +167,10 @@ function Dashboard() {
               >
                 {m.emoji}
               </button>
-              <span style={{fontSize: '0.9rem', opacity: 0.7, marginTop: 10, fontWeight: 700, color: m.score.includes('+') ? 'var(--happy)' : m.score.includes('-') ? 'var(--angry)' : 'inherit'}}>
+              <span style={{ fontSize: '1rem', fontWeight: 'bold', marginTop: '12px', color: 'var(--text-color)' }}>
+                {m.type}
+              </span>
+              <span style={{fontSize: '0.85rem', opacity: 0.7, marginTop: '4px', fontWeight: 700, color: m.score.includes('+') ? 'var(--happy)' : m.score.includes('-') ? 'var(--angry)' : 'inherit'}}>
                 {m.score} pts
               </span>
             </div>
